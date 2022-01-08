@@ -21,6 +21,10 @@ public class IntNode extends JsonNode {
         return value;
     }
 
+    @Override
+    public float floatValue() {
+        return value;
+    }
 
     public static IntNode translate(ASTNode node) {
         if (!Objects.equals(node.type, "int")) throw new InvalidSemanticsException("IntNode", node);

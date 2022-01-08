@@ -20,6 +20,11 @@ public class FloatNode extends JsonNode {
         return value;
     }
 
+    @Override
+    public int intValue() {
+        return (int) value;
+    }
+
     public static FloatNode translate(ASTNode node) {
         if (!Objects.equals(node.type, "float")) throw new InvalidSemanticsException("FloatNode", node);
         return new FloatNode(Float.parseFloat(((TerminalNode)node).text));
