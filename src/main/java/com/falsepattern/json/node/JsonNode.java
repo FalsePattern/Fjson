@@ -1,6 +1,7 @@
 package com.falsepattern.json.node;
 
 import com.falsepattern.json.parsing.ASTNode;
+import com.falsepattern.json.parsing.Parser;
 
 public abstract class JsonNode {
     public JsonNode get(String key) {
@@ -104,15 +105,28 @@ public abstract class JsonNode {
     }
 
     public static JsonNode translate(ASTNode node) {
-        return switch (node.type) {
-            case "obj" -> ObjectNode.translate(node);
-            case "arr" -> ListNode.translate(node);
-            case "string" -> StringNode.translate(node);
-            case "int" -> IntNode.translate(node);
-            case "float" -> FloatNode.translate(node);
-            case "null" -> NullNode.Null;
-            case "false", "true" -> BoolNode.translate(node);
-            default -> throw new UnsupportedOperationException("Could not translate AST to json:\n" + node.toString(4));
-        };
+        switch (node.type) {
+            case "obj":
+                return ObjectNode.translate(node);
+            case "arr":
+                return ListNode.translate(node);
+            case "string":
+                return StringNode.translate(node);
+            case "int":
+                return IntNode.translate(node);
+            case "float":
+                return FloatNode.translate(node);
+            case "null":
+                return NullNode.Null;
+            case "false":
+            case "true":
+                return BoolNode.translate(node);
+            default:
+                throw new UnsupportedOperationException("Could not translate AST to json:\n" + node.toString(4));
+        }
+    }
+
+    public static JsonNode parse(String text) {
+        return translate(new Parser(text).value());
     }
 }

@@ -1,9 +1,9 @@
 package com.falsepattern.json.parsing;
 
-import com.falsepattern.json.node.JsonNode;
 import com.falsepattern.json.parsing.token.Token;
 import com.falsepattern.json.parsing.token.Tokenizer;
 import lombok.val;
+import lombok.var;
 
 public class Parser {
     private final Tokenizer tokenizer;
@@ -46,16 +46,25 @@ public class Parser {
 
     public ASTNode value() throws InvalidSyntaxException {
         val token = tokenizer.peekNextToken();
-        return switch (token.tokenType) {
-            case String -> term_string();
-            case Int -> term_int();
-            case Float -> term_float();
-            case True, False -> term_bool();
-            case Null -> term_null();
-            case LBrace -> obj();
-            case LBracket -> arr();
-            default -> throw new InvalidSyntaxException("string, int, float, 'true', 'false', 'null', '{', '['", token);
-        };
+        switch (token.tokenType) {
+            case String:
+                return term_string();
+            case Int:
+                return term_int();
+            case Float:
+                return term_float();
+            case True:
+            case False:
+                return term_bool();
+            case Null:
+                return term_null();
+            case LBrace:
+                return obj();
+            case LBracket:
+                return arr();
+            default:
+                throw new InvalidSyntaxException("string, int, float, 'true', 'false', 'null', '{', '['", token);
+        }
     }
 
     public ASTNode obj() throws InvalidSyntaxException {

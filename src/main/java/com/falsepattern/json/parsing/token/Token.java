@@ -1,6 +1,5 @@
 package com.falsepattern.json.parsing.token;
 
-import com.falsepattern.json.parsing.ASTNode;
 import lombok.val;
 
 import java.util.Objects;
@@ -23,7 +22,7 @@ public class Token {
     public boolean equals(Object obj) {
         if (obj == this) return true;
         if (obj == null || obj.getClass() != this.getClass()) return false;
-        var that = (Token) obj;
+        val that = (Token) obj;
         return Objects.equals(this.tokenType, that.tokenType) &&
                Objects.equals(this.text, that.text);
     }

@@ -22,6 +22,6 @@ public class TerminalNode extends ASTNode {
 
     @Override
     public String toString(int indent) {
-        return (type + ": " + text).indent(indent);
+        return StringUtil.indent(type + ": " + text, indent);
     }
 }

@@ -37,7 +37,7 @@ public class ASTNode {
         val result = new StringBuilder();
         result.append(type).append(" {\n");
         children.forEach((child) -> result.append(child.toString(indent)));
-        return result.append('}').toString().indent(indent);
+        return StringUtil.indent(result.append('}').toString(), indent);
     }
 
 }
