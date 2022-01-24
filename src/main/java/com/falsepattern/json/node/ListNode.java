@@ -3,9 +3,7 @@ package com.falsepattern.json.node;
 import com.falsepattern.json.parsing.ASTNode;
 import lombok.val;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class ListNode extends JsonNode {
@@ -56,5 +54,13 @@ public class ListNode extends JsonNode {
     @Override
     public String toString() {
         return "[" + nodes.stream().map(JsonNode::toString).collect(Collectors.joining(",")) + "]";
+    }
+
+    @Override
+    public String prettyPrint(int indentDepth) {
+        return "[\n" + nodes.stream()
+                            .map((node) -> node.prettyPrint(indentDepth))
+                            .map((block) -> indent(block, indentDepth))
+                .collect(Collectors.joining(",\n")) + "\n]";
     }
 }

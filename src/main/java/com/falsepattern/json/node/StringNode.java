@@ -42,4 +42,9 @@ public class StringNode extends JsonNode{
         //return escaped text wrapped in double quotes
         return "\"" + stringify(value) + "\"";
     }
+
+    @Override
+    public String prettyPrint(int indentDepth) {
+        return toString();
+    }
 }

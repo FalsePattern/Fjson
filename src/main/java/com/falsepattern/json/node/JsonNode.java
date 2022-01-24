@@ -3,6 +3,9 @@ package com.falsepattern.json.node;
 import com.falsepattern.json.parsing.ASTNode;
 import com.falsepattern.json.parsing.Parser;
 
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
 public abstract class JsonNode {
     public JsonNode get(String key) {
         throw new UnsupportedOperationException();
@@ -128,5 +131,18 @@ public abstract class JsonNode {
 
     public static JsonNode parse(String text) {
         return translate(new Parser(text).value());
+    }
+
+    public abstract String toString();
+
+    public abstract String prettyPrint(int indentDepth);
+
+    protected String indent(String stuff, int depth) {
+        StringBuilder res = new StringBuilder();
+        for (int i = 0; i < depth; i++) {
+            res.append(' ');
+        }
+        String indent = res.toString();
+        return Arrays.stream(stuff.split("\n")).map((line) -> indent + line).collect(Collectors.joining("\n"));
     }
 }

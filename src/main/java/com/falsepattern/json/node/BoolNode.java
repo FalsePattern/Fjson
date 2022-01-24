@@ -37,4 +37,9 @@ public class BoolNode extends JsonNode {
     public String toString() {
         return value ? "true" : "false";
     }
+
+    @Override
+    public String prettyPrint(int indentDepth) {
+        return toString();
+    }
 }

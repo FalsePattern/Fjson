@@ -35,4 +35,9 @@ public class IntNode extends JsonNode {
     public String toString() {
         return Integer.toString(value);
     }
+
+    @Override
+    public String prettyPrint(int indentDepth) {
+        return toString();
+    }
 }

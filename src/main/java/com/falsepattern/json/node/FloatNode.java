@@ -34,4 +34,9 @@ public class FloatNode extends JsonNode {
     public String toString() {
         return Float.toString(value).replace("NaN", "null").replace("-Infinity", "null").replace("Infinity", "null");
     }
+
+    @Override
+    public String prettyPrint(int indentDepth) {
+        return toString();
+    }
 }

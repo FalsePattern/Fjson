@@ -12,4 +12,9 @@ public class NullNode extends JsonNode {
     public String toString() {
         return "null";
     }
+
+    @Override
+    public String prettyPrint(int indentDepth) {
+        return toString();
+    }
 }

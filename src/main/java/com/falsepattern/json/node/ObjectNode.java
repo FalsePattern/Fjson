@@ -3,6 +3,7 @@ package com.falsepattern.json.node;
 import com.falsepattern.json.parsing.ASTNode;
 import lombok.val;
 
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -10,6 +11,7 @@ import java.util.stream.Collectors;
 
 public class ObjectNode extends JsonNode{
     private final Map<String, JsonNode> values = new HashMap<>();
+    private Comparator<String> keySorter = Comparator.naturalOrder();
 
     public JsonNode get(String key) {
         return values.get(key);
@@ -30,6 +32,10 @@ public class ObjectNode extends JsonNode{
         return true;
     }
 
+    public void setSortingRule(Comparator<String> rule) {
+        keySorter = rule;
+    }
+
     @Override
     public int size() {
         return values.size();
@@ -48,7 +54,22 @@ public class ObjectNode extends JsonNode{
 
     @Override
     public String toString() {
-        return "{" + values.entrySet().stream().map((entry) -> "\"" + StringNode.stringify(entry.getKey()) + "\":" + entry.getValue().toString()).collect(Collectors.joining(",")) + "}";
+        return "{" + values.entrySet().stream().sorted(Map.Entry.comparingByKey(keySorter)).map((entry) -> "\"" + StringNode.stringify(entry.getKey()) + "\":" + entry.getValue().toString()).collect(Collectors.joining(",")) + "}";
+    }
+
+    @Override
+    public String prettyPrint(int indentDepth) {
+        return "{\n" + values.entrySet().stream().sorted(Map.Entry.comparingByKey(keySorter)).map((entry) -> {
+            val key = entry.getKey();
+            val value = entry.getValue().prettyPrint(indentDepth);
+            return stringifyEntry(key, value);
+        })
+                .map((entry) -> indent(entry, indentDepth))
+                .collect(Collectors.joining(",\n")) + "\n}";
+    }
+
+    private static String stringifyEntry(String key, String value) {
+        return "\"" + StringNode.stringify(key) + "\": " + value;
     }
 
     @Override
