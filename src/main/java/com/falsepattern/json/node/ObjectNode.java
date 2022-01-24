@@ -50,4 +50,9 @@ public class ObjectNode extends JsonNode{
     public String toString() {
         return "{" + values.entrySet().stream().map((entry) -> "\"" + StringNode.stringify(entry.getKey()) + "\":" + entry.getValue().toString()).collect(Collectors.joining(",")) + "}";
     }
+
+    @Override
+    public boolean containsKey(String key) {
+        return values.containsKey(key);
+    }
 }
