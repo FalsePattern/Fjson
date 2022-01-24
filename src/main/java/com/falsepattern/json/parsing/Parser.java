@@ -105,6 +105,7 @@ public class Parser {
         if (token.tokenType != Token.Type.LBracket) throw new InvalidSyntaxException("'['", token);
         token = tokenizer.peekNextToken();
         if (token.tokenType == Token.Type.RBracket) {
+            tokenizer.popNextToken();
             return node;
         }
         while (true) {
