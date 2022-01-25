@@ -107,6 +107,10 @@ public abstract class JsonNode {
         return set(key, new StringNode(value));
     }
 
+    public JsonNode setNull(String key) {
+        return set(key, NullNode.Null);
+    }
+
     public JsonNode set(int index, JsonNode value) {
         throw new UnsupportedOperationException(expect("set(int, JsonNode)", this.getClass(), ListNode.class));
     }
@@ -127,8 +131,32 @@ public abstract class JsonNode {
         return set(index, new StringNode(value));
     }
 
+    public JsonNode setNull(int index) {
+        return set(index, NullNode.Null);
+    }
+
     public void add(JsonNode value) {
         throw new UnsupportedOperationException(expect("add(JsonNode)", this.getClass(), ListNode.class));
+    }
+
+    public void add(int value) {
+        add(new IntNode(value));
+    }
+
+    public void add(float value) {
+        add(new FloatNode(value));
+    }
+
+    public void add(boolean value) {
+        add(BoolNode.of(value));
+    }
+
+    public void add(String value) {
+        add(new StringNode(value));
+    }
+
+    public void addNull() {
+        add(NullNode.Null);
     }
 
     public boolean containsKey(String key) {
