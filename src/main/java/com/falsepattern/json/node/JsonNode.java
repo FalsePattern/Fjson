@@ -24,7 +24,7 @@ public abstract class JsonNode {
     }
 
     public String getString(String key) {
-        return get(key).toString();
+        return get(key).stringValue();
     }
 
     public JsonNode getOrDefault(String key, JsonNode defaultValue) {

@@ -19,12 +19,18 @@ public class StringNode extends JsonNode{
 
     public static StringNode translate(ASTNode node) {
         if (!Objects.equals(node.type, "string")) throw new InvalidSemanticsException("StringNode", node);
-        return new StringNode(deStringify(node));
+        val text = ((TerminalNode)node).text;
+        return new StringNode(deStringify(text.substring(1, text.length() - 1)));
     }
 
-    static String deStringify(ASTNode node) {
-        val txt = ((TerminalNode)node).text;
-        return txt.substring(1, txt.length() - 1);
+    static String deStringify(String text) {
+        return text.replace("\\\\", "\\")
+                   .replace("\\t", "\t")
+                   .replace("\\b", "\b")
+                   .replace("\\n", "\n")
+                   .replace("\\r", "\r")
+                   .replace("\\f", "\f")
+                   .replace("\\\"", "\"");
     }
 
     static String stringify(String s) {

@@ -47,7 +47,7 @@ public class ObjectNode extends JsonNode{
         val children = node.getChildren();
         for (val child: children) {
             val parts = child.getChildren();
-            result.set(StringNode.deStringify(parts.get(0)), JsonNode.translate(parts.get(1)));
+            result.set(StringNode.translate(parts.get(0)).stringValue(), JsonNode.translate(parts.get(1)));
         }
         return result;
     }
