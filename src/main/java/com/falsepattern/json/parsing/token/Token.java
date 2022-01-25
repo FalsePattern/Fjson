@@ -46,7 +46,7 @@ public class Token {
         Newline("(?:\\r\\n|\\r|\\n)"),
         Float("-?" + Token.INT + "(?:(?:\\.[0-9]+)|" + EXP + ")"),
         Int("-?" + Token.INT),
-        String("\"(" + ESC + "|" + SAFECODEPOINT + "|" + NEWLINE + ")*\"");
+        String("\"(?:" + ESC + "|" + SAFECODEPOINT + "|" + NEWLINE + ")*\"");
         public final Pattern regex;
 
         Type(String regex) {
@@ -60,5 +60,5 @@ public class Token {
     private static final String HEX = "(?:[0-9a-fA-F])";
     private static final String NEWLINE = "(?:\\r\\n|\\r|\\n)";
     private static final String UNICODE = "(?:u" + HEX + HEX + HEX + HEX + ")";
-    private static final String ESC = "(?:\\\\(?:[\"\\\\/bfnrt] | " + UNICODE + "))";
+    private static final String ESC = "(?:\\\\(?:[\"\\\\/bfnrt]|" + UNICODE + "))";
 }
