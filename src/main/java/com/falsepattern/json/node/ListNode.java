@@ -30,6 +30,11 @@ public class ListNode extends JsonNode {
     }
 
     @Override
+    public boolean containsIndex(int index) {
+        return index >= 0 && index < nodes.size();
+    }
+
+    @Override
     public int size() {
         return nodes.size();
     }
