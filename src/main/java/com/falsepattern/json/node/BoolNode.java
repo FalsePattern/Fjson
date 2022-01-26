@@ -1,6 +1,7 @@
 package com.falsepattern.json.node;
 
 import com.falsepattern.json.parsing.ASTNode;
+import lombok.NonNull;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
@@ -41,7 +42,7 @@ public class BoolNode extends JsonNode {
     }
 
     @Contract(pure = true)
-    public static @NotNull BoolNode translate(@NotNull ASTNode node) {
+    public static @NotNull BoolNode translate(@NotNull @NonNull ASTNode node) {
         if (Objects.equals(node.type, "true")) return BoolNode.True;
         if (Objects.equals(node.type, "false")) return BoolNode.False;
         throw new InvalidSemanticsException("BoolNode", node);

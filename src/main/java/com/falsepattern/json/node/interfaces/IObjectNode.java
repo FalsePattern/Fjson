@@ -1,7 +1,6 @@
 package com.falsepattern.json.node.interfaces;
 
 import com.falsepattern.json.node.*;
-import lombok.NonNull;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnmodifiableView;
@@ -67,7 +66,7 @@ public interface IObjectNode extends ISizedNode, INode {
      * @throws UnsupportedOperationException If this node is not an {@link ObjectNode}.
      */
     @Contract(mutates = "this")
-    void setSortingRule(@NotNull @NonNull Comparator<@NotNull String> rule);
+    void setSortingRule(@NotNull Comparator<@NotNull String> rule);
 
     /**
      * @param key The property to get the value of.

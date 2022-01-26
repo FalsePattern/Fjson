@@ -2,6 +2,7 @@ package com.falsepattern.json.node;
 
 import com.falsepattern.json.parsing.ASTNode;
 import com.falsepattern.json.parsing.TerminalNode;
+import lombok.NonNull;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
@@ -51,7 +52,7 @@ public class FloatNode extends JsonNode {
     }
 
     @Contract(pure = true)
-    public static @NotNull FloatNode translate(@NotNull ASTNode node) {
+    public static @NotNull FloatNode translate(@NotNull @NonNull ASTNode node) {
         if (!Objects.equals(node.type, "float")) throw new InvalidSemanticsException("FloatNode", node);
         return new FloatNode(Float.parseFloat(((TerminalNode)node).text));
     }

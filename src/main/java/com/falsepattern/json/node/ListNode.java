@@ -36,7 +36,7 @@ public class ListNode extends JsonNode {
 
     @Contract(pure = true)
     @Override
-    public @NotNull @UnmodifiableView List<JsonNode> getJavaList() {
+    public @NotNull @UnmodifiableView List<@NotNull JsonNode> getJavaList() {
         return Collections.unmodifiableList(nodes);
     }
 

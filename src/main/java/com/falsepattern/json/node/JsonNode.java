@@ -37,7 +37,7 @@ public abstract class JsonNode implements INode, ISizedNode, IObjectNode, IListN
 
     @Contract(pure = true)
     @Override
-    public @NotNull @UnmodifiableView Map<String, JsonNode> getJavaMap() {
+    public @NotNull @UnmodifiableView Map<@NotNull String, @NotNull JsonNode> getJavaMap() {
         throw new UnsupportedOperationException(expect("asMap()", this.getClass(), ObjectNode.class));
     }
 
@@ -186,7 +186,7 @@ public abstract class JsonNode implements INode, ISizedNode, IObjectNode, IListN
         throw new UnsupportedOperationException(expect("boolValue()", this.getClass(), BoolNode.class));
     }
 
-    public static @NotNull JsonNode translate(@NotNull ASTNode node) {
+    public static @NotNull JsonNode translate(@NotNull @NonNull ASTNode node) {
         switch (node.type) {
             case "obj":
                 return ObjectNode.translate(node);
@@ -208,11 +208,11 @@ public abstract class JsonNode implements INode, ISizedNode, IObjectNode, IListN
         }
     }
 
-    public static @NotNull JsonNode parse(@NotNull String text) {
+    public static @NotNull JsonNode parse(@NotNull @NonNull String text) {
         return translate(new Parser(text).value());
     }
 
-    protected @NotNull String indent(@NotNull String stuff, int depth) {
+    protected @NotNull String indent(@NotNull @NonNull String stuff, int depth) {
         StringBuilder res = new StringBuilder();
         for (int i = 0; i < depth; i++) {
             res.append(' ');
@@ -221,7 +221,7 @@ public abstract class JsonNode implements INode, ISizedNode, IObjectNode, IListN
         return Arrays.stream(stuff.split("\n")).map((line) -> indent + line).collect(Collectors.joining("\n"));
     }
 
-    private static @NotNull String expect(@NotNull String method, @NotNull Class<? extends JsonNode> thisType, @NotNull Class<?>... requiredTypes) {
+    private static @NotNull String expect(@NotNull @NonNull String method, @NotNull @NonNull Class<? extends JsonNode> thisType, @NotNull @NonNull Class<?>... requiredTypes) {
         return "Cannot call " + method + " on " + thisType.getSimpleName() + ". Must be " + Arrays.stream(requiredTypes).map(Class::getSimpleName).collect(Collectors.joining(" or ")) + ".";
     }
 }

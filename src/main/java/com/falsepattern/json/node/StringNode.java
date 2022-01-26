@@ -37,7 +37,7 @@ public class StringNode extends JsonNode{
         return true;
     }
 
-    public static StringNode of(@NonNull String value) {
+    public static @NotNull StringNode of(@NotNull @NonNull String value) {
         if (value.isEmpty()) {
             return EMPTY_STRING;
         }
@@ -50,7 +50,7 @@ public class StringNode extends JsonNode{
         return new StringNode(deStringify(text.substring(1, text.length() - 1)));
     }
 
-    static @NotNull String deStringify(@NotNull String text) {
+    static @NotNull String deStringify(@NotNull @NonNull String text) {
         return text.replace("\\\\", "\\")
                    .replace("\\t", "\t")
                    .replace("\\b", "\b")
@@ -60,7 +60,7 @@ public class StringNode extends JsonNode{
                    .replace("\\\"", "\"");
     }
 
-    static @NotNull String stringify(@NotNull String s) {
+    static @NotNull String stringify(@NotNull @NonNull String s) {
         return s.replace("\\", "\\\\")
                 .replace("\t", "\\t")
                 .replace("\b", "\\b")

@@ -6,6 +6,7 @@ import lombok.NonNull;
 import lombok.val;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -34,13 +35,13 @@ public class ObjectNode extends JsonNode {
 
     @Contract(pure = true)
     @Override
-    public @NotNull JsonNode get(@NotNull String key) {
+    public @NotNull JsonNode get(@NotNull @NonNull String key) {
         return Util.orElseThrow(values.get(key), () -> new NoSuchElementException("No such key: " + key + " in json object"));
     }
 
     @Contract(pure = true)
     @Override
-    public @NotNull Map<String, JsonNode> getJavaMap() {
+    public @NotNull @UnmodifiableView Map<@NotNull String, @NotNull JsonNode> getJavaMap() {
         return Collections.unmodifiableMap(values);
     }
 
@@ -92,7 +93,7 @@ public class ObjectNode extends JsonNode {
     }
 
     @Contract(pure = true)
-    private static @NotNull String stringifyEntry(@NotNull String key, @NotNull String value) {
+    private static @NotNull String stringifyEntry(@NotNull @NonNull String key, @NotNull @NonNull String value) {
         return "\"" + StringNode.stringify(key) + "\": " + value;
     }
 }

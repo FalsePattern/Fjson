@@ -2,6 +2,7 @@ package com.falsepattern.json.node;
 
 import com.falsepattern.json.parsing.ASTNode;
 import com.falsepattern.json.parsing.TerminalNode;
+import lombok.NonNull;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
@@ -65,7 +66,7 @@ public class IntNode extends JsonNode {
     }
 
     @Contract(pure = true)
-    public static @NotNull IntNode translate(ASTNode node) {
+    public static @NotNull IntNode translate(@NotNull @NonNull ASTNode node) {
         if (!Objects.equals(node.type, "int")) throw new InvalidSemanticsException("IntNode", node);
         return new IntNode(Integer.parseInt(((TerminalNode)node).text));
     }
