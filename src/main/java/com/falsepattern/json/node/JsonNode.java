@@ -1,237 +1,192 @@
 package com.falsepattern.json.node;
 
+import com.falsepattern.json.node.interfaces.IListNode;
+import com.falsepattern.json.node.interfaces.INode;
+import com.falsepattern.json.node.interfaces.IObjectNode;
+import com.falsepattern.json.node.interfaces.ISizedNode;
 import com.falsepattern.json.parsing.ASTNode;
 import com.falsepattern.json.parsing.Parser;
+import lombok.NonNull;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
-public abstract class JsonNode {
-    public JsonNode get(String key) {
+public abstract class JsonNode implements INode, ISizedNode, IObjectNode, IListNode {
+
+    @Contract(pure = true)
+    @Override
+    public abstract @NotNull String toString();
+
+    @Contract(pure = true)
+    @Override
+    public @NotNull String prettyPrint(int indentDepth) {
+        return toString();
+    }
+
+    @Contract(pure = true)
+    @Override
+    public @NotNull JsonNode get(@NotNull String key) {
         throw new UnsupportedOperationException(expect("get(String)", this.getClass(), ObjectNode.class));
     }
 
-    public int getInt(String key) {
-        return get(key).intValue();
+    @Contract(pure = true)
+    @Override
+    public @NotNull @UnmodifiableView Map<String, JsonNode> getJavaMap() {
+        throw new UnsupportedOperationException(expect("asMap()", this.getClass(), ObjectNode.class));
     }
 
-    public float getFloat(String key) {
-        return get(key).floatValue();
-    }
-
-    public boolean getBool(String key) {
-        return get(key).boolValue();
-    }
-
-    public String getString(String key) {
-        return get(key).stringValue();
-    }
-
-    public JsonNode getOrDefault(String key, JsonNode defaultValue) {
-        return containsKey(key) ? get(key) : defaultValue;
-    }
-
-    public int getIntOrDefault(String key, int defaultValue) {
-        return containsKey(key) ? getInt(key) : defaultValue;
-    }
-
-    public float getFloatOrDefault(String key, float defaultValue) {
-        return containsKey(key) ? getFloat(key) : defaultValue;
-    }
-
-    public boolean getBoolOrDefault(String key, boolean defaultValue) {
-        return containsKey(key) ? getBool(key) : defaultValue;
-    }
-
-    public String getStringOrDefault(String key, String defaultValue) {
-        return containsKey(key) ? getString(key) : defaultValue;
-    }
-
-    public JsonNode get(int index) {
-        throw new UnsupportedOperationException(expect("get(int)", this.getClass(), ListNode.class));
-    }
-
-    public int getInt(int index) {
-        return get(index).intValue();
-    }
-
-    public float getFloat(int index) {
-        return get(index).floatValue();
-    }
-
-    public boolean getBool(int index) {
-        return get(index).boolValue();
-    }
-
-    public String getString(int index) {
-        return get(index).toString();
-    }
-
-    public JsonNode getOrDefault(int index, JsonNode defaultValue) {
-        return containsIndex(index) ? get(index) : defaultValue;
-    }
-
-    public int getIntOrDefault(int index, int defaultValue) {
-        return containsIndex(index) ? getInt(index) : defaultValue;
-    }
-
-    public float getFloatOrDefault(int index, float defaultValue) {
-        return containsIndex(index) ? getFloat(index) : defaultValue;
-    }
-
-    public boolean getBoolOrDefault(int index, boolean defaultValue) {
-        return containsIndex(index) ? getBool(index) : defaultValue;
-    }
-
-    public String getStringOrDefault(int index, String defaultValue) {
-        return containsIndex(index) ? getString(index) : defaultValue;
-    }
-
-    public JsonNode set(String key, JsonNode value) {
-        throw new UnsupportedOperationException(expect("set(String, JsonNode)", this.getClass(), ObjectNode.class));
-    }
-
-    public JsonNode set(String key, int value) {
-        return set(key, new IntNode(value));
-    }
-
-    public JsonNode set(String key, float value) {
-        return set(key, new FloatNode(value));
-    }
-
-    public JsonNode set(String key, boolean value) {
-        return set(key, BoolNode.of(value));
-    }
-
-    public JsonNode set(String key, String value) {
-        return set(key, new StringNode(value));
-    }
-
-    public JsonNode setNull(String key) {
-        return set(key, NullNode.Null);
-    }
-
-    public JsonNode set(int index, JsonNode value) {
-        throw new UnsupportedOperationException(expect("set(int, JsonNode)", this.getClass(), ListNode.class));
-    }
-
-    public JsonNode set(int index, int value) {
-        return set(index, new IntNode(value));
-    }
-
-    public JsonNode set(int index, float value) {
-        return set(index, new FloatNode(value));
-    }
-
-    public JsonNode set(int index, boolean value) {
-        return set(index, BoolNode.of(value));
-    }
-
-    public JsonNode set(int index, String value) {
-        return set(index, new StringNode(value));
-    }
-
-    public JsonNode setNull(int index) {
-        return set(index, NullNode.Null);
-    }
-
-    public void add(JsonNode value) {
-        throw new UnsupportedOperationException(expect("add(JsonNode)", this.getClass(), ListNode.class));
-    }
-
-    public void add(int value) {
-        add(new IntNode(value));
-    }
-
-    public void add(float value) {
-        add(new FloatNode(value));
-    }
-
-    public void add(boolean value) {
-        add(BoolNode.of(value));
-    }
-
-    public void add(String value) {
-        add(new StringNode(value));
-    }
-
-    public void addNull() {
-        add(NullNode.Null);
-    }
-
-    public boolean containsKey(String key) {
+    @Contract(pure = true)
+    @Override
+    public boolean containsKey(@NotNull String key) {
         throw new UnsupportedOperationException(expect("containsKey(String)", this.getClass(), ObjectNode.class));
     }
 
+    @Override
+    public void set(@NotNull String key, @NotNull JsonNode value) {
+        throw new UnsupportedOperationException(expect("set(String, JsonNode)", this.getClass(), ObjectNode.class));
+    }
+
+    @Override
+    public @NotNull JsonNode remove(@NotNull String key) {
+        throw new UnsupportedOperationException(expect("remove(String)", this.getClass(), ObjectNode.class));
+    }
+
+    @Override
+    public void setSortingRule(@NotNull @NonNull Comparator<@NotNull String> rule) {
+        throw new UnsupportedOperationException(expect("setSortingRule(Comparator<String>)", this.getClass(), ObjectNode.class));
+    }
+
+    @Contract(pure = true)
+    @Override
+    public @NotNull JsonNode get(int index) {
+        throw new UnsupportedOperationException(expect("get(int)", this.getClass(), ListNode.class));
+    }
+
+    @Contract(pure = true)
+    @Override
+    public @NotNull @UnmodifiableView List<@NotNull JsonNode> getJavaList() {
+        throw new UnsupportedOperationException(expect("asList()", this.getClass(), ListNode.class));
+    }
+
+    @Contract(pure = true)
+    @Override
     public boolean containsIndex(int index) {
         throw new UnsupportedOperationException(expect("containsIndex(int)", this.getClass(), ListNode.class));
     }
 
-    public int size() {
-        throw new UnsupportedOperationException(expect("size()", this.getClass(), ListNode.class, ObjectNode.class));
+    @Override
+    public void set(int index, @NotNull JsonNode value) {
+        throw new UnsupportedOperationException(expect("set(int, JsonNode)", this.getClass(), ListNode.class));
     }
 
-    public JsonNode remove(String key) {
-        throw new UnsupportedOperationException(expect("remove(String)", this.getClass(), ObjectNode.class));
+    @Override
+    public void add(@NotNull JsonNode value) {
+        throw new UnsupportedOperationException(expect("add(JsonNode)", this.getClass(), ListNode.class));
     }
 
+    @NotNull
+    @Override
     public JsonNode remove(int key) {
         throw new UnsupportedOperationException(expect("remove(int)", this.getClass(), ListNode.class));
     }
 
+    @Contract(pure = true)
+    @Override
+    public int size() {
+        throw new UnsupportedOperationException(expect("size()", this.getClass(), ListNode.class, ObjectNode.class));
+    }
+
+    @Contract(pure = true)
+    @Override
     public boolean isObject() {
         return false;
     }
 
+    @Contract(pure = true)
+    @Override
     public boolean isList() {
         return false;
     }
 
+    @Contract(pure = true)
+    @Override
     public boolean isString() {
         return false;
     }
 
+    @Contract(pure = true)
+    @Override
     public boolean isInt() {
         return false;
     }
 
+    @Contract(pure = true)
+    @Override
     public boolean isFloat() {
         return false;
     }
 
+    @Contract(pure = true)
+    @Override
+    public boolean isNumber() {
+        return false;
+    }
+
+    @Contract(pure = true)
+    @Override
     public boolean isBoolean() {
         return false;
     }
 
+    @Contract(pure = true)
+    @Override
     public boolean isNull() {
         return false;
     }
 
-    public ObjectNode asObjectNode() {
-        return (ObjectNode) this;
+    @Contract(value = "-> this", pure = true)
+    @Override
+    public @NotNull ObjectNode asObjectNode() {
+        throw new UnsupportedOperationException(expect("asObjectNode()", this.getClass(), ObjectNode.class));
     }
 
-    public ListNode asListNode() {
-        return (ListNode) this;
+    @Contract(value = "-> this", pure = true)
+    @Override
+    public @NotNull ListNode asListNode() {
+        throw new UnsupportedOperationException(expect("asListNode()", this.getClass(), ListNode.class));
     }
 
-    public String stringValue() {
+    @Contract(pure = true)
+    @Override
+    public @NotNull String stringValue() {
         throw new UnsupportedOperationException(expect("stringValue()", this.getClass(), StringNode.class));
     }
 
+    @Contract(pure = true)
+    @Override
     public int intValue() {
         throw new UnsupportedOperationException(expect("intValue()", this.getClass(), IntNode.class));
     }
 
+    @Contract(pure = true)
+    @Override
     public float floatValue() {
         throw new UnsupportedOperationException(expect("floatValue()", this.getClass(), FloatNode.class));
     }
 
+    @Contract(pure = true)
+    @Override
     public boolean boolValue() {
         throw new UnsupportedOperationException(expect("boolValue()", this.getClass(), BoolNode.class));
     }
 
-    public static JsonNode translate(ASTNode node) {
+    public static @NotNull JsonNode translate(@NotNull ASTNode node) {
         switch (node.type) {
             case "obj":
                 return ObjectNode.translate(node);
@@ -253,15 +208,11 @@ public abstract class JsonNode {
         }
     }
 
-    public static JsonNode parse(String text) {
+    public static @NotNull JsonNode parse(@NotNull String text) {
         return translate(new Parser(text).value());
     }
 
-    public abstract String toString();
-
-    public abstract String prettyPrint(int indentDepth);
-
-    protected String indent(String stuff, int depth) {
+    protected @NotNull String indent(@NotNull String stuff, int depth) {
         StringBuilder res = new StringBuilder();
         for (int i = 0; i < depth; i++) {
             res.append(' ');
@@ -270,7 +221,7 @@ public abstract class JsonNode {
         return Arrays.stream(stuff.split("\n")).map((line) -> indent + line).collect(Collectors.joining("\n"));
     }
 
-    private static String expect(String method, Class<? extends JsonNode> thisType, Class<?>... requiredTypes) {
+    private static @NotNull String expect(@NotNull String method, @NotNull Class<? extends JsonNode> thisType, @NotNull Class<?>... requiredTypes) {
         return "Cannot call " + method + " on " + thisType.getSimpleName() + ". Must be " + Arrays.stream(requiredTypes).map(Class::getSimpleName).collect(Collectors.joining(" or ")) + ".";
     }
 }
