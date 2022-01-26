@@ -15,6 +15,12 @@ public class ObjectNode extends JsonNode {
     private final Map<@NotNull String, @NotNull JsonNode> values = new HashMap<>();
     private Comparator<@NotNull String> keySorter = Comparator.naturalOrder();
 
+    @Override
+    public boolean equals(@NotNull JsonNode other) {
+        if (!other.isObject()) return false;
+        return values.equals(other.getJavaMap());
+    }
+
     @Contract(pure = true)
     @Override
     public @NotNull String toString() {

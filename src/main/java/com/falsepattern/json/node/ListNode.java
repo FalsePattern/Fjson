@@ -13,6 +13,12 @@ import java.util.stream.Collectors;
 public class ListNode extends JsonNode {
     private final List<@NotNull JsonNode> nodes = new ArrayList<>();
 
+    @Override
+    public boolean equals(@NotNull JsonNode other) {
+        if (!other.isList()) return false;
+        return nodes.equals(other.getJavaList());
+    }
+
     @Contract(pure = true)
     @Override
     public @NotNull String toString() {

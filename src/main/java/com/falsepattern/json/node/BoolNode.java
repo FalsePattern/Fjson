@@ -30,6 +30,11 @@ public class BoolNode extends JsonNode {
         return value;
     }
 
+    @Override
+    public boolean equals(@NotNull JsonNode other) {
+        return other.isBoolean() && other.boolValue() == value;
+    }
+
     @Contract(pure = true)
     @Override
     public @NotNull String toString() {

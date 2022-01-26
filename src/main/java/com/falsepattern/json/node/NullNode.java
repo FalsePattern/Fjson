@@ -15,6 +15,11 @@ public class NullNode extends JsonNode {
         return true;
     }
 
+    @Override
+    public boolean equals(@NotNull JsonNode other) {
+        return other.isNull();
+    }
+
     @Contract(pure = true)
     @Override
     public @NotNull String toString() {

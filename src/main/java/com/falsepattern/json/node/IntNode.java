@@ -27,6 +27,11 @@ public class IntNode extends JsonNode {
         this.value = value;
     }
 
+    @Override
+    public boolean equals(@NotNull JsonNode other) {
+        return other.isNumber() && other.intValue() == value;
+    }
+
     @Contract(pure = true)
     @Override
     public @NotNull String toString() {

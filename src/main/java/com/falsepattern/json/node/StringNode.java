@@ -18,6 +18,11 @@ public class StringNode extends JsonNode{
         this.value = value;
     }
 
+    @Override
+    public boolean equals(@NotNull JsonNode other) {
+        return other.isString() && value.equals(other.stringValue());
+    }
+
     @Contract(pure = true)
     @Override
     public @NotNull String toString() {

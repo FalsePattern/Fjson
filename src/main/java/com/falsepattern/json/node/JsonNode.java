@@ -21,6 +21,18 @@ public abstract class JsonNode implements INode, ISizedNode, IObjectNode, IListN
 
     @Contract(pure = true)
     @Override
+    public abstract boolean equals(@NotNull JsonNode other);
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof JsonNode) {
+            return equals((JsonNode) obj);
+        }
+        return false;
+    }
+
+    @Contract(pure = true)
+    @Override
     public abstract @NotNull String toString();
 
     @Contract(pure = true)

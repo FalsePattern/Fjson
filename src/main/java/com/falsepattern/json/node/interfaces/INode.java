@@ -1,5 +1,6 @@
 package com.falsepattern.json.node.interfaces;
 
+import com.falsepattern.json.node.JsonNode;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -92,4 +93,11 @@ public interface INode {
      */
     @Contract(pure = true)
     boolean boolValue();
+
+    /**
+     * @param other The node to compare to.
+     * @return True if this node is equal to the given node, false otherwise.
+     */
+    @Contract(pure = true)
+    boolean equals(@NotNull JsonNode other);
 }
