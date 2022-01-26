@@ -11,6 +11,8 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnmodifiableView;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
@@ -34,6 +36,10 @@ public abstract class JsonNode implements INode, ISizedNode, IObjectNode, IListN
     @Contract(pure = true)
     @Override
     public abstract @NotNull String toString();
+
+
+    @Contract(pure = true)
+    public abstract @NotNull JsonNode clone();
 
     @Contract(pure = true)
     @Override
@@ -147,7 +153,7 @@ public abstract class JsonNode implements INode, ISizedNode, IObjectNode, IListN
     @Contract(pure = true)
     @Override
     public boolean isNumber() {
-        return false;
+        return isInt() || isFloat();
     }
 
     @Contract(pure = true)
@@ -182,14 +188,14 @@ public abstract class JsonNode implements INode, ISizedNode, IObjectNode, IListN
 
     @Contract(pure = true)
     @Override
-    public int intValue() {
-        throw new UnsupportedOperationException(expect("intValue()", this.getClass(), IntNode.class));
+    public @NotNull BigInteger bigIntValue() {
+        throw new UnsupportedOperationException(expect("bigIntValue()", this.getClass(), IntNode.class, FloatNode.class));
     }
 
     @Contract(pure = true)
     @Override
-    public float floatValue() {
-        throw new UnsupportedOperationException(expect("floatValue()", this.getClass(), FloatNode.class));
+    public @NotNull BigDecimal bigDecimalValue() {
+        throw new UnsupportedOperationException(expect("bigDecimalValue()", this.getClass(), FloatNode.class, IntNode.class));
     }
 
     @Contract(pure = true)

@@ -7,11 +7,14 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.Objects;
 
 @Unmodifiable
 public class IntNode extends JsonNode {
-    private final int value;
+    private final BigInteger value;
+    private BigDecimal decimalForm;
     private static final int LOW_VALUES = 256;
     private static final int LOW_VALUES_MIN = -LOW_VALUES;
     private static final int LOW_VALUES_MAX = LOW_VALUES - 1;
@@ -19,23 +22,28 @@ public class IntNode extends JsonNode {
     private static final IntNode[] LOW_VALUES_NEG = new IntNode[LOW_VALUES];
     static {
         for (int i = 0; i < LOW_VALUES; i++) {
-            LOW_VALUES_POS[i] = new IntNode(i);
-            LOW_VALUES_NEG[i] = new IntNode(-i - 1);
+            LOW_VALUES_POS[i] = new IntNode(BigInteger.valueOf(i));
+            LOW_VALUES_NEG[i] = new IntNode(BigInteger.valueOf(-i - 1));
         }
     }
-    private IntNode(int value) {
+    private IntNode(BigInteger value) {
         this.value = value;
     }
 
     @Override
     public boolean equals(@NotNull JsonNode other) {
-        return other.isNumber() && other.intValue() == value;
+        return other.isNumber() && other.bigIntValue().equals(value);
     }
 
     @Contract(pure = true)
     @Override
     public @NotNull String toString() {
-        return Integer.toString(value);
+        return value.toString();
+    }
+
+    @Override
+    public @NotNull JsonNode clone() {
+        return this;
     }
 
     @Contract(pure = true)
@@ -44,22 +52,15 @@ public class IntNode extends JsonNode {
         return true;
     }
 
-    @Contract(pure = true)
     @Override
-    public boolean isNumber() {
-        return true;
-    }
-
-    @Contract(pure = true)
-    @Override
-    public int intValue() {
+    public @NotNull BigInteger bigIntValue() {
         return value;
     }
 
-    @Contract(pure = true)
     @Override
-    public float floatValue() {
-        return value;
+    public @NotNull BigDecimal bigDecimalValue() {
+        //Lazy initialization
+        return decimalForm == null ? decimalForm = new BigDecimal(value) : decimalForm;
     }
 
     @Contract(pure = true)
@@ -67,12 +68,30 @@ public class IntNode extends JsonNode {
         if (value >= LOW_VALUES_MIN && value <= LOW_VALUES_MAX) {
             return value >= 0 ? LOW_VALUES_POS[value] : LOW_VALUES_NEG[-value - 1];
         }
+        return new IntNode(BigInteger.valueOf(value));
+    }
+
+    @Contract(pure = true)
+    public static @NotNull IntNode of(long value) {
+        if (value >= LOW_VALUES_MIN && value <= LOW_VALUES_MAX) {
+            return value >= 0 ? LOW_VALUES_POS[(int) value] : LOW_VALUES_NEG[(int) (-value - 1)];
+        }
+        return new IntNode(BigInteger.valueOf(value));
+    }
+
+    @Contract(pure = true)
+    public static @NotNull IntNode of(String value) {
+        return new IntNode(new BigInteger(value));
+    }
+
+    @Contract(pure = true)
+    public static @NotNull IntNode of(BigInteger value) {
         return new IntNode(value);
     }
 
     @Contract(pure = true)
     public static @NotNull IntNode translate(@NotNull @NonNull ASTNode node) {
         if (!Objects.equals(node.type, "int")) throw new InvalidSemanticsException("IntNode", node);
-        return new IntNode(Integer.parseInt(((TerminalNode)node).text));
+        return new IntNode(new BigInteger(((TerminalNode) node).text));
     }
 }

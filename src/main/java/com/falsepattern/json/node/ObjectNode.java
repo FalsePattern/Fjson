@@ -1,6 +1,5 @@
 package com.falsepattern.json.node;
 
-import com.falsepattern.json.Util;
 import com.falsepattern.json.parsing.ASTNode;
 import lombok.NonNull;
 import lombok.val;
@@ -39,10 +38,17 @@ public class ObjectNode extends JsonNode {
                              .collect(Collectors.joining(",\n")) + "\n}";
     }
 
+    @Override
+    public @NotNull JsonNode clone() {
+        val clone = new ObjectNode();
+        values.forEach((key, value) -> clone.set(key, value.clone()));
+        return clone;
+    }
+
     @Contract(pure = true)
     @Override
     public @NotNull JsonNode get(@NotNull @NonNull String key) {
-        return Util.orElseThrow(values.get(key), () -> new NoSuchElementException("No such key: " + key + " in json object"));
+        return Objects.requireNonNull(values.get(key), "No such key: " + key + " in json object");
     }
 
     @Contract(pure = true)

@@ -41,6 +41,11 @@ public class BoolNode extends JsonNode {
         return value ? "true" : "false";
     }
 
+    @Override
+    public @NotNull JsonNode clone() {
+        return this;
+    }
+
     @Contract(pure = true)
     public static @NotNull BoolNode of(boolean value) {
         return value ? BoolNode.True : BoolNode.False;
