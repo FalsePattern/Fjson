@@ -35,6 +35,11 @@ public class ListNode extends JsonNode {
     }
 
     @Override
+    public boolean isValidated() {
+        return super.isValidated() && nodes.stream().allMatch(JsonNode::isValidated);
+    }
+
+    @Override
     public @NotNull JsonNode clone() {
         val clone = new ListNode();
         for (val node: nodes) {

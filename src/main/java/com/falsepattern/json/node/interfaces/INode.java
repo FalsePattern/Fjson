@@ -1,6 +1,7 @@
 package com.falsepattern.json.node.interfaces;
 
 import com.falsepattern.json.node.JsonNode;
+import com.falsepattern.json.schema.ValidationStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -165,4 +166,23 @@ public interface INode extends Cloneable{
      */
     @Contract(pure = true)
     boolean equals(@NotNull JsonNode other);
+
+    /**
+     * @return The schema validation result for this node.
+     */
+    @Contract(pure = true)
+    @NotNull ValidationStatus getValidationStatus();
+
+    /**
+     * @param status The schema validation result for this node.
+     */
+    @Contract(mutates = "this")
+    void setValidationStatus(@NotNull ValidationStatus status);
+
+    /**
+     * Recursively validates this node and all its children.
+     * @return The validation result for this tree.
+     */
+    @Contract(pure = true)
+    boolean isValidated();
 }

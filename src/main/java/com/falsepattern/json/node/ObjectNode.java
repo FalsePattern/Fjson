@@ -26,6 +26,11 @@ public class ObjectNode extends JsonNode {
         return "{" + values.entrySet().stream().sorted(Map.Entry.comparingByKey(keySorter)).map((entry) -> "\"" + StringNode.stringify(entry.getKey()) + "\":" + entry.getValue()).collect(Collectors.joining(",")) + "}";
     }
 
+    @Override
+    public boolean isValidated() {
+        return super.isValidated() && values.values().stream().allMatch(JsonNode::isValidated);
+    }
+
     @Contract(pure = true)
     @Override
     public @NotNull String prettyPrint(int indentDepth) {

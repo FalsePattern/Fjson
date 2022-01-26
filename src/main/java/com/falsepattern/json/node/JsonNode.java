@@ -6,7 +6,10 @@ import com.falsepattern.json.node.interfaces.IObjectNode;
 import com.falsepattern.json.node.interfaces.ISizedNode;
 import com.falsepattern.json.parsing.ASTNode;
 import com.falsepattern.json.parsing.Parser;
+import com.falsepattern.json.schema.ValidationStatus;
+import lombok.Getter;
 import lombok.NonNull;
+import lombok.Setter;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnmodifiableView;
@@ -20,6 +23,16 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public abstract class JsonNode implements INode, ISizedNode, IObjectNode, IListNode {
+
+    @Getter
+    @Setter
+    @NonNull
+    private ValidationStatus validationStatus = ValidationStatus.UNVALIDATED;
+
+    @Override
+    public boolean isValidated() {
+        return validationStatus.isValidated();
+    }
 
     @Contract(pure = true)
     @Override
