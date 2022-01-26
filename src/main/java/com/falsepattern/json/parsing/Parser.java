@@ -73,6 +73,7 @@ public class Parser {
         if (token.tokenType != Token.Type.LBrace) throw new InvalidSyntaxException("'{'", token);
         token = tokenizer.peekNextToken();
         if (token.tokenType == Token.Type.RBrace) {
+            tokenizer.popNextToken();
             return node;
         }
         while (true) {
