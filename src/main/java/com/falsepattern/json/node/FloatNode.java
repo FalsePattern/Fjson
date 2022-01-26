@@ -7,24 +7,32 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.Objects;
 
 @Unmodifiable
 public class FloatNode extends JsonNode {
-    private final float value;
-    private FloatNode(float value) {
+    private final BigDecimal value;
+    private BigInteger integerForm;
+    private FloatNode(BigDecimal value) {
         this.value = value;
     }
 
     @Override
     public boolean equals(@NotNull JsonNode other) {
-        return other.isNumber() && other.floatValue() == value;
+        return other.isNumber() && other.bigDecimalValue().equals(value);
     }
 
     @Contract(pure = true)
     @Override
     public @NotNull String toString() {
-        return Float.toString(value).replace("NaN", "null").replace("-Infinity", "null").replace("Infinity", "null");
+        return value.toPlainString();
+    }
+
+    @Override
+    public @NotNull JsonNode clone() {
+        return this;
     }
 
     @Contract(pure = true)
@@ -33,32 +41,48 @@ public class FloatNode extends JsonNode {
         return true;
     }
 
-    @Contract(pure = true)
     @Override
-    public boolean isNumber() {
-        return true;
+    public boolean isInt() {
+        try {
+            //noinspection ResultOfMethodCallIgnored
+            bigIntValue();
+            return true;
+        } catch (ArithmeticException e) {
+            return false;
+        }
     }
 
-    @Contract(pure = true)
     @Override
-    public float floatValue() {
+    public @NotNull BigInteger bigIntValue() {
+        //Lazy initialization
+        return integerForm == null ? integerForm = value.toBigIntegerExact() : integerForm;
+    }
+
+    @Override
+    public @NotNull BigDecimal bigDecimalValue() {
         return value;
     }
 
     @Contract(pure = true)
-    @Override
-    public int intValue() {
-        return (int) value;
+    public static @NotNull FloatNode of(float value) {
+        return new FloatNode(BigDecimal.valueOf(value));
     }
 
-    @Contract(pure = true)
-    public static @NotNull FloatNode of(float value) {
+    public static @NotNull FloatNode of(double value) {
+        return new FloatNode(BigDecimal.valueOf(value));
+    }
+
+    public static @NotNull FloatNode of(String value) {
+        return new FloatNode(new BigDecimal(value));
+    }
+
+    public static @NotNull FloatNode of(BigDecimal value) {
         return new FloatNode(value);
     }
 
     @Contract(pure = true)
     public static @NotNull FloatNode translate(@NotNull @NonNull ASTNode node) {
         if (!Objects.equals(node.type, "float")) throw new InvalidSemanticsException("FloatNode", node);
-        return new FloatNode(Float.parseFloat(((TerminalNode)node).text));
+        return new FloatNode(new BigDecimal(((TerminalNode) node).text));
     }
 }

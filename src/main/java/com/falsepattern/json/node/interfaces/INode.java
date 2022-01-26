@@ -4,7 +4,10 @@ import com.falsepattern.json.node.JsonNode;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
-public interface INode {
+import java.math.BigDecimal;
+import java.math.BigInteger;
+
+public interface INode extends Cloneable{
     /**
      * @return The compact JSON representation of this node.
      */
@@ -17,6 +20,7 @@ public interface INode {
      */
     @Contract(pure = true)
     @NotNull String prettyPrint(int indentDepth);
+
 
     /**
      * @return True if this node is an {@link com.falsepattern.json.node.ObjectNode}, false otherwise.
@@ -74,18 +78,79 @@ public interface INode {
     @NotNull String stringValue();
 
     /**
-     * @return the integer value of this node.
+     * @return The {@link BigInteger} value of this node.
      * @throws UnsupportedOperationException If this node is not a {@link com.falsepattern.json.node.IntNode} or {@link com.falsepattern.json.node.FloatNode}.
+     * @throws ArithmeticException If the node is a {@link com.falsepattern.json.node.FloatNode} and the value has a non-zero fractional part.
      */
     @Contract(pure = true)
-    int intValue();
+    @NotNull BigInteger bigIntValue();
 
     /**
-     * @return The float value of this node.
+     * @return the truncated integer value of this node. See {@link BigInteger#intValue()} for details.
+     * @throws UnsupportedOperationException If this node is not a {@link com.falsepattern.json.node.IntNode} or {@link com.falsepattern.json.node.FloatNode}.
+     * @throws ArithmeticException If the node is a {@link com.falsepattern.json.node.FloatNode} and the value has a non-zero fractional part.
+     */
+    @Contract(pure = true)
+    default int intValue() {
+        return bigIntValue().intValue();
+    }
+
+    /**
+     * @return The exact integer value of this node. See {@link BigDecimal#intValueExact()} for details.
+     * @throws UnsupportedOperationException If this node is not a {@link com.falsepattern.json.node.IntNode} or {@link com.falsepattern.json.node.FloatNode}.
+     * @throws ArithmeticException If this node does not fit into an {@code int}.
+     * @throws ArithmeticException If the node is a {@link com.falsepattern.json.node.FloatNode} and the value has a non-zero fractional part.
+     */
+    @Contract(pure = true)
+    default int intValueExact() {
+        return bigIntValue().intValueExact();
+    }
+
+    /**
+     * @return The truncated long value of this node. See {@link BigInteger#longValue()} for details.
+     * @throws UnsupportedOperationException If this node is not a {@link com.falsepattern.json.node.IntNode} or {@link com.falsepattern.json.node.FloatNode}.
+     * @throws ArithmeticException If the node is a {@link com.falsepattern.json.node.FloatNode} and the value has a non-zero fractional part.
+     */
+    @Contract(pure = true)
+    default long longValue() {
+        return bigIntValue().longValue();
+    }
+
+    /**
+     * @return The exact long value of this node. See {@link BigDecimal#longValueExact()} for details.
+     * @throws UnsupportedOperationException If this node is not a {@link com.falsepattern.json.node.IntNode} or {@link com.falsepattern.json.node.FloatNode}.
+     * @throws ArithmeticException If this node does not fit into a {@code long}.
+     * @throws ArithmeticException If the node is a {@link com.falsepattern.json.node.FloatNode} and the value has a non-zero fractional part.
+     */
+    @Contract(pure = true)
+    default long longValueExact() {
+        return bigIntValue().longValueExact();
+    }
+
+    /**
+     * @return The decimal value of this node.
      * @throws UnsupportedOperationException If this node is not a {@link com.falsepattern.json.node.FloatNode} or {@link com.falsepattern.json.node.IntNode}.
      */
     @Contract(pure = true)
-    float floatValue();
+    @NotNull BigDecimal bigDecimalValue();
+
+    /**
+     * @return The float value of this node. May lose precision.
+     * @throws UnsupportedOperationException If this node is not a {@link com.falsepattern.json.node.FloatNode} or {@link com.falsepattern.json.node.IntNode}.
+     */
+    @Contract(pure = true)
+    default float floatValue() {
+        return bigDecimalValue().floatValue();
+    }
+
+    /**
+     * @return The double value of this node. May lose precision.
+     * @throws UnsupportedOperationException If this node is not a {@link com.falsepattern.json.node.FloatNode} or {@link com.falsepattern.json.node.IntNode}.
+     */
+    @Contract(pure = true)
+    default double doubleValue() {
+        return bigDecimalValue().doubleValue();
+    }
 
     /**
      * @return The boolean value of this node.

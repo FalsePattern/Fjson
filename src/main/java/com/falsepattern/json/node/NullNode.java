@@ -25,4 +25,9 @@ public class NullNode extends JsonNode {
     public @NotNull String toString() {
         return "null";
     }
+
+    @Override
+    public @NotNull JsonNode clone() {
+        return this;
+    }
 }

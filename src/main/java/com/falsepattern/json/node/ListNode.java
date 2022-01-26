@@ -34,6 +34,15 @@ public class ListNode extends JsonNode {
                             .collect(Collectors.joining(",\n")) + "\n]";
     }
 
+    @Override
+    public @NotNull JsonNode clone() {
+        val clone = new ListNode();
+        for (val node: nodes) {
+            clone.add(node.clone());
+        }
+        return clone;
+    }
+
     @Contract(pure = true)
     @Override
     public @NotNull JsonNode get(int index) {

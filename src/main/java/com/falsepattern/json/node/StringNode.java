@@ -11,7 +11,7 @@ import org.jetbrains.annotations.Unmodifiable;
 import java.util.Objects;
 
 @Unmodifiable
-public class StringNode extends JsonNode{
+public class StringNode extends JsonNode {
     private final String value;
     private static final StringNode EMPTY_STRING = new StringNode("");
     private StringNode(String value) {
@@ -28,6 +28,11 @@ public class StringNode extends JsonNode{
     public @NotNull String toString() {
         //return escaped text wrapped in double quotes
         return "\"" + stringify(value) + "\"";
+    }
+
+    @Override
+    public @NotNull JsonNode clone() {
+        return this;
     }
 
     @Contract(pure = true)
@@ -64,30 +69,14 @@ public class StringNode extends JsonNode{
                 if (++i < len) {
                     char next = text.charAt(i);
                     switch (next) {
-                        case '"':
-                            sb.append('"');
-                            break;
-                        case '\\':
-                            sb.append('\\');
-                            break;
-                        case '/':
-                            sb.append('/');
-                            break;
-                        case 't':
-                            sb.append('\t');
-                            break;
-                        case 'b':
-                            sb.append('\b');
-                            break;
-                        case 'n':
-                            sb.append('\n');
-                            break;
-                        case 'r':
-                            sb.append('\r');
-                            break;
-                        case 'f':
-                            sb.append('\f');
-                            break;
+                        case '"': sb.append('"'); break;
+                        case '\\': sb.append('\\'); break;
+                        case '/': sb.append('/'); break;
+                        case 't': sb.append('\t'); break;
+                        case 'b': sb.append('\b'); break;
+                        case 'n': sb.append('\n'); break;
+                        case 'r': sb.append('\r'); break;
+                        case 'f': sb.append('\f'); break;
                         case 'u':
                             if (i + 4 < len) {
                                 String hex = text.substring(i + 1, i + 5);
@@ -117,27 +106,13 @@ public class StringNode extends JsonNode{
         for (int i = 0; i < len; i++) {
             char c = text.charAt(i);
             switch (c) {
-                case '\\':
-                    sb.append("\\\\");
-                    break;
-                case '\t':
-                    sb.append("\\t");
-                    break;
-                case '\b':
-                    sb.append("\\b");
-                    break;
-                case '\n':
-                    sb.append("\\n");
-                    break;
-                case '\r':
-                    sb.append("\r");
-                    break;
-                case '\f':
-                    sb.append("\\f");
-                    break;
-                case '\"':
-                    sb.append("\\\"");
-                    break;
+                case '\\': sb.append("\\\\"); break;
+                case '\t': sb.append("\\t"); break;
+                case '\b': sb.append("\\b"); break;
+                case '\n': sb.append("\\n"); break;
+                case '\r': sb.append("\r"); break;
+                case '\f': sb.append("\\f"); break;
+                case '\"': sb.append("\\\""); break;
                 default:
                     if (c < 32) {
                         sb.append("\\u").append(String.format("%04x", (int)c));
