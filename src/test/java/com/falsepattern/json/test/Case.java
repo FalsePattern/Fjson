@@ -2,7 +2,6 @@ package com.falsepattern.json.test;
 
 import com.falsepattern.json.node.JsonNode;
 import com.falsepattern.json.schema.Rule;
-import com.falsepattern.json.schema.subrules.Schema;
 import lombok.val;
 import org.junit.jupiter.api.Assertions;
 
