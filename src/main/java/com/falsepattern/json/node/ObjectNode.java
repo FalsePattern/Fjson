@@ -95,12 +95,16 @@ public class ObjectNode extends JsonNode {
     @Contract(pure = true)
     public static @NotNull ObjectNode translate(@NotNull @NonNull ASTNode node) {
         if (!Objects.equals(node.type, "obj")) throw new InvalidSemanticsException("ObjectNode", node);
+        val order = new ArrayList<String>();
         val result = new ObjectNode();
         val children = node.getChildren();
         for (val child: children) {
             val parts = child.getChildren();
-            result.set(StringNode.translate(parts.get(0)).stringValue(), JsonNode.translate(parts.get(1)));
+            val key = StringNode.translate(parts.get(0)).stringValue();
+            order.add(key);
+            result.set(key, JsonNode.translate(parts.get(1)));
         }
+        result.setSortingRule(Comparator.comparingInt(order::indexOf));
         return result;
     }
 
